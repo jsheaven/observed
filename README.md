@@ -73,7 +73,7 @@ someObjectObserved.foo = 'Y' // nothing happens, also here there is no listener
 
 // you can also test an object to be observed (if Proxy the proxy is set)
 isObserved(someObjectObserved) // true
-someObject(someObjectObserved) // false
+isObserved(someObject) // false
 
 // and also fetch the callback references from an observed object
 getObservers(someObjectObserved.cool) // [ ... ]
