@@ -18,12 +18,12 @@
 
 - ✅ Observes mutations (value changes) in JavaScript objects at any level
 - ✅ Available as a simple, functional API: `const myObservedObj = observed({ foo: { test: 123 } });`
-- ✅ Observe changes at any level: `onSet(myObservedObj.foo, (prop, value, prevValue) => { ... })`
-- ✅ Allows to stop observing at any level using `offSet(myObservedObj.foo, ...)`
-- ✅ Allows to register interceptors to change mutation values `onSet(myObservedObj.foo, () => { return 'foo' }, 'before')`
-- ✅ Allows to register global listeners and interceptors: `observed({ ... }, { onSet: () => { ... }, ... })`
-- ✅ Allows to control depth of observation: `observed({ ... }, { deep: false })`
-- ✅ Just `678 byte` nano sized (ESM, gizpped)
+- ✅ Observe changes at any level `foo.test` etc.
+- ✅ Allows to stop observing at any level using `offSet(myObservedObj.foo)`
+- ✅ Allows to register interceptors to change mutation values
+- ✅ Allows to register _global_ listeners and interceptors
+- ✅ Allows to control depth of observation
+- ✅ Just `690 byte` nano sized (ESM, gizpped)
 - ✅ 0 dependencies
 - ✅ Tree-shakable and side-effect free
 - ✅ First class TypeScript support
