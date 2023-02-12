@@ -106,6 +106,9 @@ const someObjectObserved = observed(someObject, {
   onSet: (prop, value, prevValue) => {
     console.log(prop, 'changed from', prevValue, 'to', value)
   },
+  onGet: (prop, value, target) => {
+    console.log(prop, 'has been read/accessed with value', value, 'in target object', target)
+  },
   onBeforeSet: (prop, value, prevValue) => {
     console.log(prop, 'changed from', prevValue, 'to', value)
     if (typeof value === 'number') {

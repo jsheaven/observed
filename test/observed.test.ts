@@ -7,8 +7,8 @@ import {
   observedCallbacksSymbol,
   isObserved,
   getObservers,
-  Callback,
   defaultOptions,
+  SetCallback,
   mayObserve,
 } from '../dist/index.esm'
 
@@ -23,7 +23,7 @@ describe('observed', () => {
 
   describe('onSet', () => {
     it('throws an error if callback is not a function', () => {
-      expect(() => onSet({}, {} as Callback)).toThrow('callback must be a function')
+      expect(() => onSet({}, {} as SetCallback)).toThrow('callback must be a function')
     })
 
     it('registers a callback to be called after a mutation happens', () => {
@@ -36,7 +36,7 @@ describe('observed', () => {
 
   describe('offSet', () => {
     it('throws an error if callback is not a function that has been passed by reference to onSet before', () => {
-      expect(() => offSet({}, {} as Callback)).toThrow('callback must be a function')
+      expect(() => offSet({}, {} as SetCallback)).toThrow('callback must be a function')
     })
 
     it('throws an error if offSet is called before any callbacks have been registered with onSet', () => {
@@ -137,6 +137,28 @@ describe('observed', () => {
       object.level1.level2.prop = 'new value'
       expect(spy).toHaveBeenCalledWith('prop', 'new value', 'value')
       expect(onSetSpy).toHaveBeenCalledWith('prop', undefined, 'value')
+    })
+
+    it('deep mutation change listening in "before" phase, changeing a value to undefinged and a global after handler, and a global onGet', () => {
+      const onSetSpy = jest.fn(() => {})
+      const onGetSpy = jest.fn(() => {})
+      const object = observed(
+        {
+          level1: {
+            level2: {
+              prop: 'value',
+            },
+          },
+        },
+        { onSet: onSetSpy, onGet: onGetSpy },
+      )
+
+      const spy = jest.fn(() => {})
+      onSet(object.level1.level2, spy, 'before')
+      object.level1.level2.prop = 'new value'
+      expect(spy).toHaveBeenCalledWith('prop', 'new value', 'value')
+      expect(onSetSpy).toHaveBeenCalledWith('prop', undefined, 'value')
+      expect(onGetSpy).toHaveBeenCalledTimes(7)
     })
   })
 })

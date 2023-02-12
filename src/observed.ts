@@ -1,15 +1,18 @@
 export const observedSymbol = Symbol('observed')
 export const observedCallbacksSymbol = Symbol('observedCallbacks')
 
-export type Callback = (prop: PropertyKey, value: any, valueBefore: any) => void | Promise<void>
+export type SetCallback = (prop: PropertyKey, value: any, valueBefore: any) => void | Promise<void>
+export type GetCallback = (prop: PropertyKey, value: any, target: any) => void | Promise<void>
 
 export interface ObserveOptions {
   /** allows for deep mutation listening. default: true  */
   deep?: boolean
   /** allows to register a callback globally to hook/mutate all mutations every level just before they happen. Has to return a value  */
-  onBeforeSet?: Callback
+  onBeforeSet?: SetCallback
   /** allows to register a callback globally to hook/mutate all mutations on every level after they have happened  */
-  onSet?: Callback
+  onSet?: SetCallback
+  /** allows to get notified when a value is read */
+  onGet?: GetCallback
 }
 
 export const defaultOptions: ObserveOptions = {
@@ -19,14 +22,14 @@ export const defaultOptions: ObserveOptions = {
 export type Phase = 'before' | 'after'
 
 export interface CallbackRegistration {
-  cb: Callback
+  cb: SetCallback
   phase: Phase
 }
 
 const errorMsgCallbackIsNotAFunction = 'callback must be a function'
 
 /** listens for mutations on an object or its sub-objects */
-export const onSet = <T extends object>(object: T, callback: Callback, phase: Phase = 'after') => {
+export const onSet = <T extends object>(object: T, callback: SetCallback, phase: Phase = 'after') => {
   if (typeof callback !== 'function') {
     throw new Error(errorMsgCallbackIsNotAFunction)
   }
@@ -61,7 +64,7 @@ export const defineProp = (object: object, prop: PropertyKey, value: any) => {
 }
 
 /** removes a specific or all listeners from a mutation-observed object or its sub-objects */
-export const offSet = <T extends object>(object: T, callback?: Callback) => {
+export const offSet = <T extends object>(object: T, callback?: SetCallback) => {
   // remove all listeners
   if (typeof callback === 'undefined') {
     defineProp(object, observedCallbacksSymbol, [])
@@ -125,6 +128,15 @@ export const observed = <T extends object>(object: T, options: ObserveOptions = 
     return object
   } else {
     const proxy = new Proxy<T>(object, {
+      get: (target, propertyKey, receiver) => {
+        const value = Reflect.get(target, propertyKey, receiver)
+
+        if (typeof options.onGet === 'function') {
+          options.onGet(propertyKey, value, target)
+        }
+        return value
+      },
+
       set: (target, prop, value, receiver) => {
         const valueBefore = target[prop]
 
