@@ -2,7 +2,7 @@ export const observedSymbol = Symbol('observed')
 export const observedCallbacksSymbol = Symbol('observedCallbacks')
 
 export type SetCallback = (prop: PropertyKey, value: any, valueBefore: any) => void | Promise<void>
-export type GetCallback = (prop: PropertyKey, value: any, target: any) => void | Promise<void>
+export type GetCallback = (prop: PropertyKey, value: any, target: any, receiver: any) => void | Promise<void>
 
 export interface ObserveOptions {
   /** allows for deep mutation listening. default: true  */
@@ -132,7 +132,7 @@ export const observed = <T extends object>(object: T, options: ObserveOptions = 
         const value = Reflect.get(target, propertyKey, receiver)
 
         if (typeof options.onGet === 'function') {
-          options.onGet(propertyKey, value, target)
+          options.onGet(propertyKey, value, target, receiver)
         }
         return value
       },

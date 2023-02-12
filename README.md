@@ -23,7 +23,7 @@
 - ✅ Allows to register interceptors to change mutation values
 - ✅ Allows to register _global_ listeners and interceptors
 - ✅ Allows to control depth of observation
-- ✅ Just `690 byte` nano sized (ESM, gizpped)
+- ✅ Just `719 byte` nano sized (ESM, gizpped)
 - ✅ 0 dependencies
 - ✅ Tree-shakable and side-effect free
 - ✅ First class TypeScript support
@@ -106,8 +106,8 @@ const someObjectObserved = observed(someObject, {
   onSet: (prop, value, prevValue) => {
     console.log(prop, 'changed from', prevValue, 'to', value)
   },
-  onGet: (prop, value, target) => {
-    console.log(prop, 'has been read/accessed with value', value, 'in target object', target)
+  onGet: (prop, value, target, receiver) => {
+    console.log(prop, 'has been read/accessed with value', value, 'in target object', target, 'receiver', receiver)
   },
   onBeforeSet: (prop, value, prevValue) => {
     console.log(prop, 'changed from', prevValue, 'to', value)
