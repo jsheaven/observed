@@ -116,7 +116,7 @@ describe('observed', () => {
       const spy = jest.fn(() => {})
       onSet(object.level1.level2, spy, 'before')
       object.level1.level2.prop = 'new value'
-      expect(spy).toHaveBeenCalledWith('prop', 'new value', 'value')
+      expect(spy).toHaveBeenCalledWith('prop', 'new value', 'value', { prop: undefined })
     })
 
     it('deep mutation change listening in "before" phase, changeing a value to undefinged and a global after handler', () => {
@@ -135,8 +135,8 @@ describe('observed', () => {
       const spy = jest.fn(() => {})
       onSet(object.level1.level2, spy, 'before')
       object.level1.level2.prop = 'new value'
-      expect(spy).toHaveBeenCalledWith('prop', 'new value', 'value')
-      expect(onSetSpy).toHaveBeenCalledWith('prop', undefined, 'value')
+      expect(spy).toHaveBeenCalledWith('prop', 'new value', 'value', { prop: undefined })
+      expect(onSetSpy).toHaveBeenCalledWith('prop', undefined, 'value', { prop: undefined })
     })
 
     it('deep mutation change listening in "before" phase, changeing a value to undefinged and a global after handler, and a global onGet', () => {
@@ -156,9 +156,9 @@ describe('observed', () => {
       const spy = jest.fn(() => {})
       onSet(object.level1.level2, spy, 'before')
       object.level1.level2.prop = 'new value'
-      expect(spy).toHaveBeenCalledWith('prop', 'new value', 'value')
-      expect(onSetSpy).toHaveBeenCalledWith('prop', undefined, 'value')
-      expect(onGetSpy).toHaveBeenCalledTimes(7)
+      expect(spy).toHaveBeenCalledWith('prop', 'new value', 'value', { prop: undefined })
+      expect(onSetSpy).toHaveBeenCalledWith('prop', undefined, 'value', { prop: undefined })
+      expect(onGetSpy).toHaveBeenCalledTimes(19)
     })
   })
 })

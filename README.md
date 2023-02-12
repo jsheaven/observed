@@ -23,7 +23,7 @@
 - ✅ Allows to register interceptors to change mutation values
 - ✅ Allows to register _global_ listeners and interceptors
 - ✅ Allows to control depth of observation
-- ✅ Just `719 byte` nano sized (ESM, gizpped)
+- ✅ Just `720 byte` nano sized (ESM, gizpped)
 - ✅ 0 dependencies
 - ✅ Tree-shakable and side-effect free
 - ✅ First class TypeScript support

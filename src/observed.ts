@@ -1,7 +1,7 @@
 export const observedSymbol = Symbol('observed')
 export const observedCallbacksSymbol = Symbol('observedCallbacks')
 
-export type SetCallback = (prop: PropertyKey, value: any, valueBefore: any) => void | Promise<void>
+export type SetCallback = (prop: PropertyKey, value: any, valueBefore: any, receiver: any) => void | Promise<void>
 export type GetCallback = (prop: PropertyKey, value: any, target: any, receiver: any) => void | Promise<void>
 
 export interface ObserveOptions {
@@ -145,7 +145,7 @@ export const observed = <T extends object>(object: T, options: ObserveOptions = 
 
         // call global callback if set (always in 'after' phase)
         if (typeof options.onBeforeSet === 'function') {
-          value = options.onBeforeSet(prop, value, valueBefore)
+          value = options.onBeforeSet(prop, value, valueBefore, receiver)
         }
 
         const observers = getObservers(object)
@@ -156,7 +156,7 @@ export const observed = <T extends object>(object: T, options: ObserveOptions = 
 
           if (callbackRegistration.phase === 'before') {
             // allow to hook and override in 'before' phase (value change interception)
-            value = callbackRegistration.cb(prop, value, valueBefore)
+            value = callbackRegistration.cb(prop, value, valueBefore, receiver)
           }
         }
 
@@ -168,13 +168,13 @@ export const observed = <T extends object>(object: T, options: ObserveOptions = 
           const callbackRegistration: CallbackRegistration = observers[i]
 
           if (callbackRegistration.phase === 'after') {
-            callbackRegistration.cb(prop, value, valueBefore)
+            callbackRegistration.cb(prop, value, valueBefore, receiver)
           }
         }
 
         // call global callback if set (always in 'after' phase)
         if (typeof options.onSet === 'function') {
-          options.onSet(prop, value, valueBefore)
+          options.onSet(prop, value, valueBefore, receiver)
         }
         return true
       },
