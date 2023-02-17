@@ -1,10 +1,10 @@
 <h1 align="center">@jsheaven/observed</h1>
 
-> Transparently observe and/or intercept object mutations (changes) at any level (depth)
+> Transparently observe and/or intercept JavaScropt Object and Array mutations (data changes) at any level (depth)
 
 <h2 align="center">User Stories</h2>
 
-1. As a developer, I want to define a store as an object at one location in code, but want hooks to be called somewhere else, when values in that object change at any level I'm interested in, atomically (`foo.bar.xyz`).
+1. As a developer, I want to define a store as an object at one location in code, but want hooks to be called somewhere else, when values in that object change at any level I'm interested in, atomically (e.g. `foo.bar.xyz[1]`).
 
 2. As a developer, I want the ability to intercept mutations and change the value of the mutation before it happens (meta-programming, indirection).
 
@@ -16,8 +16,8 @@
 
 <h2 align="center">Features</h2>
 
-- ✅ Observes mutations (value changes) in JavaScript objects at any level
-- ✅ Available as a simple, functional API: `const myObservedObj = observed({ foo: { test: 123 } });`
+- ✅ Observes mutations (value changes) in JavaScript Objects and Arrays at any level
+- ✅ Available as a simple, functional API: `const myObservedObj = observed({ foo: { test: 123, bar: [true] } });`
 - ✅ Observe changes at any level `foo.test` etc.
 - ✅ Allows to stop observing at any level using `offSet(myObservedObj.foo)`
 - ✅ Allows to register interceptors to change mutation values

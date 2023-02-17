@@ -1,12 +1,12 @@
 {
   "name": "@jsheaven/observed",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "type": "module",
   "publishConfig": {
     "access": "public"
   },
   "license": "MIT",
-  "description": "Nano library to transparently observe and/or intercept object mutations via Proxy and Reflect at any depth.",
+  "description": "Nano library to transparently observe and/or intercept JavaScript Object/Array mutations via Proxy and Reflect at any depth.",
   "keywords": [
     "observe",
     "object",

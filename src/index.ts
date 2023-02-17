@@ -46,7 +46,7 @@ export const onSet = <T extends object>(object: T, callback: SetCallback, phase:
 }
 
 /** initializes an observed objects mutation callback references */
-export const initCallbackArray = <T extends object>(object: T) => {
+export const initCallbackArray = <T extends Object>(object: T) => {
   // prepare for callbacks to be added
   if (!object[observedCallbacksSymbol]) {
     defineProp(object, observedCallbacksSymbol, [])
@@ -54,7 +54,7 @@ export const initCallbackArray = <T extends object>(object: T) => {
 }
 
 /** defined a property on an object without polluting the objects own keys */
-export const defineProp = (object: object, prop: PropertyKey, value: any) => {
+export const defineProp = (object: object | Array<any>, prop: PropertyKey, value: any) => {
   Object.defineProperty(object, prop, {
     enumerable: false,
     value,
@@ -109,7 +109,7 @@ export const getObservers = <T extends object>(object: T): Array<CallbackRegistr
   object[observedCallbacksSymbol]
 
 /** observes mutations of an object via an Proxy at any depth */
-export const observed = <T extends object>(object: T, options: ObserveOptions = defaultOptions): T => {
+export const observed = <T extends Object>(object: T, options: ObserveOptions = defaultOptions): T => {
   options = {
     ...defaultOptions,
     ...options,

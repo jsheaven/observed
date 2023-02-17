@@ -332,3 +332,47 @@ describe('getObservers', () => {
     expect(getObservers(otherObject)).toEqual(undefined)
   })
 })
+
+describe('observe change in arrays', () => {
+  it('observes top-level arrays when assigning a value', () => {
+    const array = observed<Array<number>>([])
+    const cb = jest.fn(() => {})
+    onSet(array, cb)
+
+    array[0] = 123
+
+    expect(cb).toHaveBeenCalledWith('0', 123, undefined, [123])
+  })
+
+  it('observes sub-arrays when assigning a value', () => {
+    const o = observed({
+      someArray: [123],
+    })
+    const cb = jest.fn(() => {})
+    onSet(o.someArray, cb)
+
+    o.someArray[1] = 456
+
+    expect(cb).toHaveBeenCalledWith('1', 456, undefined, [123, 456])
+  })
+
+  it('observes top-level arrays when pushing onto an array', () => {
+    const array = observed<Array<number>>([])
+    const cb = jest.fn(() => {})
+    onSet(array, cb)
+
+    array.push(123)
+
+    expect(cb).toHaveBeenCalledWith('0', 123, undefined, [123])
+  })
+
+  it('observes top-level arrays when popping from an an array', () => {
+    const array = observed<Array<number>>([123])
+    const cb = jest.fn(() => {})
+    onSet(array, cb)
+
+    array.pop()
+
+    expect(cb).toHaveBeenCalledWith('length', 0, 1, [])
+  })
+})
